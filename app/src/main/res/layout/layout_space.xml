@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_space"
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+    android:layout_alignParentTop="true"
+    android:layout_marginLeft="5dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <com.tpnet.imoocvideomerge.view.SpanTextView
+        android:id="@+id/tv_available_space"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/available_space"
+        android:textSize="13sp" />
+
+    <ProgressBar
+        android:id="@+id/pb_available_space"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:secondaryProgress="100"
+        android:layout_marginRight="5dp" />
+
+
+</LinearLayout>

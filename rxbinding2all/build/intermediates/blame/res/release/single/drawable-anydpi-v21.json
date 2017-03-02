@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "I:\\AndroidStudioProjects\\ImoocVideoMerge\\rxbinding2all\\build\\intermediates\\res\\merged\\release\\drawable-anydpi-v21\\design_ic_visibility.xml",
+        "source": "I:\\AndroidStudioProjects\\ImoocVideoMerge\\rxbinding2all\\build\\intermediates\\exploded-aar\\com.android.support\\design\\25.2.0\\res\\drawable-anydpi-v21\\design_ic_visibility.xml"
+    },
+    {
+        "merged": "I:\\AndroidStudioProjects\\ImoocVideoMerge\\rxbinding2all\\build\\intermediates\\res\\merged\\release\\drawable-anydpi-v21\\design_ic_visibility_off.xml",
+        "source": "I:\\AndroidStudioProjects\\ImoocVideoMerge\\rxbinding2all\\build\\intermediates\\exploded-aar\\com.android.support\\design\\25.2.0\\res\\drawable-anydpi-v21\\design_ic_visibility_off.xml"
+    }
+]

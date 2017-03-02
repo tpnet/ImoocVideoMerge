@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.tpnet.imoocvideomerge.ui.MainActivity" >
+
+    <!--actionViewClass这句代码最关键，实现了主要的搜索视图功能-->
+    <item android:id="@+id/action_search"
+        android:title="@string/action_search"
+        android:orderInCategory="100"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        android:imeOptions="actionSearch"
+        app:showAsAction="ifRoom" />
+
+
+</menu>

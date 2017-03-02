@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="5dp"
+    app:contentPadding="5dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="5dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    >
+    <!-- android:foreground="?android:attr/selectableItemBackground"-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        >
+
+        <ImageView
+            android:id="@+id/iv_folder_pic"
+            android:layout_width="130dp"
+            android:layout_height="80dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_launcher"
+            android:layout_marginRight="8dp"
+            android:scaleType="fitXY"
+            />
+
+        <ImageView
+            android:id="@+id/ib_more"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/more"
+            android:background="?actionBarItemBackground"
+            style="@style/Widget.AppCompat.ActionButton.Overflow"
+            android:tint="@color/background_floating_material_dark"
+
+            />
+
+        <TextView
+            android:id="@+id/tv_folder_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="courseName"
+            android:layout_toRightOf="@id/iv_folder_pic"
+            android:textSize="15sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textColor="@color/blackLight"
+            android:layout_toLeftOf="@id/ib_more"
+            android:layout_marginBottom="8dp"
+            android:text="Android面试解密-Layout_weight大赛复赛地方" />
+
+
+
+
+
+        <com.tpnet.imoocvideomerge.view.SpanTextView
+            android:id="@+id/tv_down_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="courseName"
+            android:layout_toRightOf="@id/iv_folder_pic"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:textSize="13sp"
+            android:layout_alignParentBottom="true"
+            android:text="@string/down_time" />
+
+        <com.tpnet.imoocvideomerge.view.SpanTextView
+            android:layout_above="@id/tv_down_time"
+            android:id="@+id/tv_file_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="courseName"
+            android:layout_toRightOf="@id/iv_folder_pic"
+            android:textSize="13sp"
+            android:text="@string/file_num" />
+
+
+        <com.tpnet.imoocvideomerge.view.SpanTextView
+            android:id="@+id/tv_folder_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="courseName"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="10dp"
+            android:textSize="13sp"
+            android:layout_above="@id/tv_down_time"
+            android:text="@string/folder_size" />
+
+
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
+

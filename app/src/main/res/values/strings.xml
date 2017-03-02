@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">慕课网视频另存</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_search">搜索</string>
+    <string name="copy_success">复制成功</string>
+    <string name="copy_error">复制失败</string>
+
+    <string name="search_hint">数据太多? 搜索一下</string>
+    <string name="file_num">视频数: %1$s</string>
+    <string name="folder_size">大小: %1$s</string>
+    <string name="down_time">下载时间: %1$s</string>
+    <string name="available_space">剩余%1$s</string>
+
+
+    <string name="save_folder">另存分类视频</string>
+    <string name="save_file">另存单个视频</string>
+    <string name="copy_folder_path">复制视频路径</string>
+    <string name="copy_file_addr">复制视频/文件地址</string>
+    <string name="copy_pic_addr">复制图片地址</string>
+    <string name="copy_folder_name">复制分类名</string>
+    <string name="copy_file_name">复制视频名</string>
+    <string name="copy_folder_time">复制时间</string>
+    <string name="info_text_one" ><b>实现原理:</b>\n根据文件读取视频列表信息。\n </string>
+    <string name="info_text_two" ><b>开源地址:</b>\ntest  \n\n<b>用到技术:</b> </string>
+    <string name="info_text_three">
+        - Rxjava2 : Rxjava2系列文章http://blog.csdn.net/niubitianping/article/category/6736107 \n
+        - Rxbingding2all: 打包好支持Rxjava2的Rxbinding2all:http://blog.csdn.net/niubitianping/article/details/56014611 \n
+        - SpanTextView： 封装好的多功能富文本控件: http://blog.csdn.net/niubitianping/article/details/54863694 \n
+        - MVP： 弱引用解决内存泄漏的mvp，没有用dagger2 \n
+        - Rxlifecycle： 解决Rxjava的内存泄漏 \n
+        - Rxpermissions： Rxjava方式的权限请求 \n
+        - Glide: 图片请求框架\n\n and so on
+    </string>
+
+
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/popup_file_save"
+        android:title="@string/save_file" />
+
+    <item
+        android:id="@+id/popup_folder_copy_path"
+        android:title="@string/copy_folder_path" />
+
+    <item
+        android:id="@+id/popup_file_copy_addr"
+        android:title="@string/copy_file_addr" />
+
+    <item
+        android:id="@+id/popup_file_copy_name"
+        android:title="@string/copy_file_name" />
+
+
+
+</menu>

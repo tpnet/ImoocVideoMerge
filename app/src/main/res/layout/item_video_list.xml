@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:gravity="center_vertical"
+    android:paddingLeft="10dp"
+    android:layout_height="50dp"
+    android:background="@drawable/rv_selector"
+
+    >
+
+    <!-- 标题 -->
+    <com.tpnet.imoocvideomerge.view.SpanTextView
+        android:id="@+id/tv_video_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="1-1 课程视频介绍"
+        android:maxLines="2"
+        />
+
+    <!-- 大小 -->
+    <TextView
+        android:id="@+id/tv_video_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3.2MB/5.7MB"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        />
+
+    <!-- 是否下载中、下载完成、已保存 -->
+    <ImageView
+        android:id="@+id/iv_down_state"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:contentDescription="下载状态"
+        android:src="@drawable/save_complete"
+        />
+
+    <ImageView
+        android:id="@+id/ib_more"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/more"
+        android:background="?actionBarItemBackground"
+        style="@style/Widget.AppCompat.ActionButton.Overflow"
+        android:tint="@color/background_floating_material_dark"
+        />
+</LinearLayout>
