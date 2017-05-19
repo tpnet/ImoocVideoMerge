@@ -50,14 +50,14 @@ public class VideoListAdapter extends BaseRecyclerAdapter<FileBean, VideoListAda
         }
         viewHolder.tvVideoSize.setText(size);
 
-
+        //mp4还是zip格式
         if(data.getFileFormat().equals("mp4")){
             viewHolder.tvVideoTitle.setImageToLast(R.drawable.mp4_icon);
         }else{
             viewHolder.tvVideoTitle.setImageToLast(R.drawable.zip_icon);
         }
 
-        //mp4还是zip格式
+
         //viewHolder.ivDownState.setImageResource(R.drawable.down_complete);
 
         viewHolder.ibMore.setOnClickListener(new View.OnClickListener() {

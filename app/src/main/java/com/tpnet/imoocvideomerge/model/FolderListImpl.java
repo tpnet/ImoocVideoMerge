@@ -1,16 +1,24 @@
 package com.tpnet.imoocvideomerge.model;
 
+import android.content.Context;
+
 import com.tpnet.imoocvideomerge.base.Constant;
 import com.tpnet.imoocvideomerge.bean.FileBean;
 import com.tpnet.imoocvideomerge.bean.FolderBean;
 import com.tpnet.imoocvideomerge.bean.IMooc;
+import com.tpnet.imoocvideomerge.contact.FolderContact;
+import com.tpnet.imoocvideomerge.model.face.IOnListener;
+import com.tpnet.imoocvideomerge.model.face.IOnLoadListListener;
 import com.tpnet.imoocvideomerge.util.FileUtils;
 import com.tpnet.imoocvideomerge.util.LogUtil;
+import com.tpnet.imoocvideomerge.util.RegularTool;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -26,88 +34,97 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Litp on 2017/2/22.
  */
 
-public class FolderListImpl implements IGetFolderList {
+public class FolderListImpl implements FolderContact.IFloderModel {
 
     //private List<FolderBean> folderList = new ArrayList<>();
 
 
     @Override
-    public void getFolderList(final IOnListener listener) {
+    public void searchFolder(String searchText, IOnLoadListListener<FolderBean> listListener) {
 
 
-        if (FileUtils.checkSDcard()) {
-            //video文件夹
-            File file = new File(Constant.ROOT_PATH);
-            if (file.exists() && file.listFiles() != null) {
+        List<FolderBean> folderList = new ArrayList<>();
+        for (FolderBean folderBean : IMooc.getInstance().getFolderList()) {
 
-                Observable.fromArray(file.listFiles())
-                        .observeOn(Schedulers.io())
-                        .flatMap(new Function<File, ObservableSource<FolderBean>>() {
-                            @Override
-                            public ObservableSource<FolderBean> apply(@NonNull File file) throws Exception {
-                                if (file.isDirectory()) {
-                                    //每个分类视频文件夹
-
-                                    FolderBean folderBean = new FolderBean();
-
-                                    folderBean.setFolderFileNum(file.listFiles().length + "");
-                                    folderBean.setFolderName(file.getName());
-                                    folderBean.setFolderDowntime(file.lastModified());
-
-                                    //保存信息到单例
-                                    IMooc.getInstance().addFolder(folderBean);
-
-
-                                    //保存文件夹信息
-                                    folderBean.setFolderSize(
-                                            FileUtils.getFormatSize(getImoocFolderInfo(file, file.getName())
-                                            ));
-
-                                    FileBean fileBean = IMooc.getInstance().getFileList(file.getName()).get(0);
-                                    folderBean.setFolderThumbPath(fileBean.getThumb_url());
-                                    folderBean.setFolderRealName(fileBean.getCourseName());
-
-                                    return Observable.just(folderBean);
-
-                                }
-                                return null;
-                            }
-                        })
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<FolderBean>() {
-                            @Override
-                            public void accept(@NonNull FolderBean folderBean) throws Exception {
-                                //得到floderBean信息
-                                //folderList.add(folderBean);
-                            }
-                        }, new Consumer<Throwable>() {
-                            @Override
-                            public void accept(@NonNull Throwable throwable) throws Exception {
-                                throwable.printStackTrace();
-                                LogUtil.e("获取文件夹信息有抛出错误:" + throwable.toString());
-                                //listener.error(new Exception("获取文件夹信息有抛出错误:" + throwable.toString()));
-                            }
-                        }, new Action() {
-                            @Override
-                            public void run() throws Exception {
-                                //完毕
-                                listener.success(null);
-                            }
-                        });
-
-
-            } else {
-                listener.success(new Exception("没有找到慕课网下载的视频"));
+            if (folderBean.getFolderRealName().matches(RegularTool.getSearchReg(searchText))) {
+                folderList.add(folderBean);
             }
-
-        } else {
-            listener.success(new Exception("内存卡不存在"));
         }
+
+        listListener.success(folderList, null);
     }
 
 
+    @Override
+    public void getFolderList(Context context, final IOnListener listener) {
 
 
+        //video文件夹
+        File file = new File(Constant.getProjectPath(context));
+        if (file.exists() && file.listFiles() != null) {
+
+            Observable.fromArray(file.listFiles())
+                    .observeOn(Schedulers.io())
+                    .flatMap(new Function<File, ObservableSource<FolderBean>>() {
+                        @Override
+                        public ObservableSource<FolderBean> apply(@NonNull File file) throws Exception {
+                            if (file.isDirectory()) {
+                                //每个分类视频文件夹
+
+                                FolderBean folderBean = new FolderBean();
+
+                                folderBean.setFolderFileNum(file.listFiles().length + "");
+                                folderBean.setFolderName(file.getName());
+                                folderBean.setFolderDowntime(file.lastModified());
+
+                                //保存信息到单例
+                                IMooc.getInstance().addFolder(folderBean);
+
+
+                                //保存文件夹信息
+                                folderBean.setFolderSize(
+                                        FileUtils.getFormatSize(getImoocFolderInfo(file, file.getName())
+                                        ));
+
+                                FileBean fileBean = IMooc.getInstance().getFileList(file.getName()).get(0);
+                                folderBean.setFolderThumbPath(fileBean.getThumb_url());
+                                folderBean.setFolderRealName(fileBean.getCourseName());
+
+                                return Observable.just(folderBean);
+
+                            }
+                            return null;
+                        }
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<FolderBean>() {
+                        @Override
+                        public void accept(@NonNull FolderBean folderBean) throws Exception {
+                            //得到floderBean信息
+                            //folderList.add(folderBean);
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(@NonNull Throwable throwable) throws Exception {
+                            throwable.printStackTrace();
+                            LogUtil.e("获取文件夹信息有抛出错误:" + throwable.toString());
+                            listener.success(new Exception("获取文件夹信息有抛出错误:" + throwable.toString()));
+                        }
+                    }, new Action() {
+                        @Override
+                        public void run() throws Exception {
+                            //完毕
+                            listener.success(null);
+                        }
+                    });
+
+
+        } else {
+            listener.success(new Exception("没有找到慕课网下载的视频"));
+        }
+
+
+    }
 
 
     /**
@@ -149,7 +166,7 @@ public class FolderListImpl implements IGetFolderList {
             }
 
         } catch (Exception e) {
-            LogUtil.e("设置IMooc数据错误"+e.getMessage());
+            LogUtil.e("设置IMooc数据错误" + e.getMessage());
             e.printStackTrace();
         }
 

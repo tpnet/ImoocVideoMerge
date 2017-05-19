@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    >
+
+    <PreferenceCategory
+        android:title="基本设置"
+        >
+
+        <ListPreference
+            android:key="@string/preference_key_storage"
+            android:title="默认内存卡"
+            android:entries="@array/array_storage"
+            android:entryValues="@array/array_storage"
+            />
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

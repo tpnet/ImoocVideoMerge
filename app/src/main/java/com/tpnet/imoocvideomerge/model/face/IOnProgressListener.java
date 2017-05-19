@@ -1,8 +1,9 @@
-package com.tpnet.imoocvideomerge.model;
+package com.tpnet.imoocvideomerge.model.face;
 
 import java.util.List;
 
 /**
+ * 进度接口
  * Created by Litp on 2017/2/24.
  */
 

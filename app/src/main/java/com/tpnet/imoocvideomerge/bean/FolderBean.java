@@ -3,10 +3,12 @@ package com.tpnet.imoocvideomerge.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 /**
+ * 文件夹bean类
  * Created by Litp on 2017/2/22.
  */
 
@@ -40,7 +42,7 @@ public class FolderBean implements Parcelable {
     }
 
     public void setFolderRealName(String folderRealName) {
-        this.folderRealName = folderRealName;
+        this.folderRealName = folderRealName.replaceAll(File.separator, "");
     }
 
     public String getFolderName() {
@@ -48,7 +50,7 @@ public class FolderBean implements Parcelable {
     }
 
     public void setFolderName(String folderName) {
-        this.folderName = folderName;
+        this.folderName = folderName.replaceAll(File.separator, "");
     }
 
     public String getFolderFileNum() {

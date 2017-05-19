@@ -21,4 +21,13 @@
         android:id="@+id/popup_folder_copy_time"
         android:title="@string/copy_folder_time" />
 
+    <item
+        android:id="@+id/popup_open_folder"
+        android:title="@string/open_folder"/>
+
+    <item
+        android:id="@+id/popup_open_old_folder"
+        android:title="@string/open_old_folder"/>
+
+
 </menu>

@@ -1,10 +1,14 @@
 package com.tpnet.imoocvideomerge.model;
 
+import android.content.Context;
+
 import com.tpnet.imoocvideomerge.bean.FileBean;
 import com.tpnet.imoocvideomerge.bean.FolderBean;
 import com.tpnet.imoocvideomerge.bean.IMooc;
+import com.tpnet.imoocvideomerge.model.face.ICommon;
+import com.tpnet.imoocvideomerge.model.face.IOnProgressListener;
 import com.tpnet.imoocvideomerge.util.FileUtils;
-import com.tpnet.imoocvideomerge.util.RegularTool;
+import com.tpnet.imoocvideomerge.util.LogUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,7 +28,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * 公共逻辑
+ * 公共的业务逻辑
  * Created by Litp on 2017/2/24.
  */
 
@@ -33,24 +37,12 @@ public class CommonImpl implements ICommon<String> {
 
     private Disposable copyDisposable = null;
 
-    @Override
-    public void searchFolder(String searchText, IOnLoadListListener<FolderBean> listListener) {
-
-
-        List<FolderBean> folderList = new ArrayList<>();
-        for (FolderBean folderBean : IMooc.getInstance().getFolderList()) {
-
-            if (folderBean.getFolderRealName().matches(RegularTool.getSearchReg(searchText))) {
-                folderList.add(folderBean);
-            }
-        }
-
-        listListener.success(folderList, null);
-    }
-
 
     @Override
-    public void saveFolder(@NonNull final FolderBean folder, final IOnProgressListener<String> listListener) {
+    public void saveFolder(final Context context, @NonNull final FolderBean folder, final IOnProgressListener<String> listListener) {
+
+        //保存文件夹
+
 
         final List<String> successList = new ArrayList<>();
         final List<String> errorList = new ArrayList<>();
@@ -69,7 +61,9 @@ public class CommonImpl implements ICommon<String> {
                 .map(new Function<FileBean, String>() {
                     @Override
                     public String apply(@NonNull FileBean fileBean) throws Exception {
-                        String newFilePath= FileUtils.getRootPath() +
+                        String newFilePath = FileUtils.getSaveRootPathDefault(context);
+
+                        newFilePath = newFilePath +
                                 folder.getFolderRealName() +
                                 File.separator +
                                 fileBean.getChapter_seq() +
@@ -80,10 +74,10 @@ public class CommonImpl implements ICommon<String> {
                                 fileBean.getFileFormat();
 
 
-                        if(FileUtils.copyFile(fileBean.getFilePath(),newFilePath)){
+                        if (FileUtils.copyFile(fileBean.getFilePath(), newFilePath)) {
                             successList.add(fileBean.getSectionName());
                             return newFilePath;
-                        }else {
+                        } else {
                             errorList.add(fileBean.getSectionName());
                             return "";
                         }
@@ -96,46 +90,55 @@ public class CommonImpl implements ICommon<String> {
                         listListener.progress(s
                                 , fileList.size()
                                 , successList.size()
-                                , (int) (successList.size() / (double) fileList.size() *100));
+                                , (int) (successList.size() / (double) fileList.size() * 100));
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(@NonNull Throwable throwable) throws Exception {
-                        listListener.success(successList, errorList,createException(errorList));
+                        listListener.success(successList, errorList, createException(errorList));
                     }
                 }, new Action() {
                     @Override
                     public void run() throws Exception {
-                        listListener.success(successList, errorList,createException(errorList));
+                        listListener.success(successList, errorList, createException(errorList));
                     }
                 });
 
     }
 
 
-
     @Override
-    public void saveFile(final FileBean file, final IOnProgressListener<String> listListener) {
+    public void saveFile(final Context context, final FileBean file, final IOnProgressListener<String> listListener) {
 
-        final String newFilePath= FileUtils.getRootPath() +
+        final StringBuffer newFilePath = new StringBuffer();
+
+        newFilePath.append(FileUtils.getSaveRootPathDefault(context));
+
+
+        newFilePath.append(
                 file.getCourseName() +
-                File.separator +
-                file.getChapter_seq() +
-                "-" +
-                file.getSection_seq() +
-                file.getSectionName() +
-                "." +
-                file.getFileFormat();
+                        File.separator +
+                        file.getChapter_seq() +
+                        "-" +
+                        file.getSection_seq() +
+                        file.getSectionName() +
+                        "." +
+                        file.getFileFormat());
+
+
         Observable.create(new ObservableOnSubscribe<Integer>() {
             @Override
             public void subscribe(final ObservableEmitter<Integer> o) throws Exception {
 
-                FileUtils.copyFile(file.getFilePath(), newFilePath, new IOnProgressListener<String>() {
+
+                LogUtil.e("旧文件路径:" + file.getFilePath());
+
+                FileUtils.copyFile(file.getFilePath(), newFilePath.toString(), new IOnProgressListener<String>() {
                     @Override
                     public void success(List<String> successList, List<String> errorList, Exception e) {
-                        if(e == null){
+                        if (e == null) {
                             o.onComplete();
-                        }else{
+                        } else {
                             o.onError(e);
                         }
 
@@ -148,7 +151,7 @@ public class CommonImpl implements ICommon<String> {
                 });
 
             }
-        }).distinctUntilChanged()   //过滤连续重复数据
+        }).distinctUntilChanged()   //过滤连续重复的进度
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Integer>() {
@@ -159,69 +162,27 @@ public class CommonImpl implements ICommon<String> {
 
                     @Override
                     public void onNext(Integer integer) {
-                        listListener.progress(newFilePath,0,0,integer);
+                        listListener.progress(newFilePath.toString(), 0, 0, integer);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        listListener.success(null, Collections.singletonList(file.getFilePath()),new Exception(e));
+                        listListener.success(null, Collections.singletonList(file.getFilePath()), new Exception(e));
                     }
 
                     @Override
                     public void onComplete() {
-                        listListener.success(Collections.singletonList(newFilePath), null,null);
+                        listListener.success(Collections.singletonList(newFilePath.toString()), null, null);
 
                     }
                 });
 
-  /*
-
-        Observable.just(file)
-                .observeOn(Schedulers.io())
-                .map(new Function<FileBean, String>() {
-                    @Override
-                    public String apply(@NonNull FileBean fileBean) throws Exception {
-                        String newFilePath= FileUtils.getRootPath() +
-                                fileBean.getCourseName() +
-                                File.separator +
-                                fileBean.getSectionName() +
-                                "." +
-                                fileBean.getFileFormat();
-                        if(FileUtils.copyFile(fileBean.getFilePath(),newFilePath)){
-                            return newFilePath;
-                        }else {
-                            return "";
-                        }
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });*/
     }
 
 
-    private Exception createException(List<String> errorList){
+    private Exception createException(List<String> errorList) {
         Exception e = null;
-        if (errorList.size() > 0 ) {
+        if (errorList.size() > 0) {
             StringBuilder errorMsg = new StringBuilder();
             for (String str : errorList) {
                 errorMsg.append(str).append("、");
@@ -234,8 +195,8 @@ public class CommonImpl implements ICommon<String> {
     /**
      * 取消复制
      */
-    public void cancleCopy(){
-        if(copyDisposable != null && !copyDisposable.isDisposed()){
+    public void cancleCopy() {
+        if (copyDisposable != null && !copyDisposable.isDisposed()) {
             copyDisposable.dispose();
         }
     }

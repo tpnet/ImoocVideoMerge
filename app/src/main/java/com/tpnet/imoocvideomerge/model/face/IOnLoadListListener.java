@@ -1,4 +1,4 @@
-package com.tpnet.imoocvideomerge.model;
+package com.tpnet.imoocvideomerge.model.face;
 
 import java.util.List;
 

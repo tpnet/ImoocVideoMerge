@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="array_storage">
+        <item>内置</item>
+    </string-array>
+
+    <string-array name="array_storage_all">
+        <item>内置</item>
+        <item>外置</item>
+    </string-array>
+
+</resources>

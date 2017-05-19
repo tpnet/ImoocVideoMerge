@@ -1,18 +1,20 @@
 package com.tpnet.imoocvideomerge.presenter;
 
+import android.content.Context;
+
 import com.tpnet.imoocvideomerge.base.BasePersenter;
 import com.tpnet.imoocvideomerge.bean.FileBean;
+import com.tpnet.imoocvideomerge.contact.VideoContact;
 import com.tpnet.imoocvideomerge.model.CommonImpl;
-import com.tpnet.imoocvideomerge.model.ICommon;
-import com.tpnet.imoocvideomerge.model.IOnProgressListener;
-import com.tpnet.imoocvideomerge.ui.inter.IShowVideoList;
+import com.tpnet.imoocvideomerge.model.face.ICommon;
+import com.tpnet.imoocvideomerge.model.face.IOnProgressListener;
 
 /**
  * 视屏列表p层
  * Created by Litp on 2017/2/23.
  */
 
-public class VideoListPre extends BasePersenter<IShowVideoList> {
+public class VideoListPre extends BasePersenter<VideoContact.IVideoView> {
 
     private ICommon<String> iCommon;
 
@@ -21,8 +23,8 @@ public class VideoListPre extends BasePersenter<IShowVideoList> {
 
     }
 
-    public void saveFile(FileBean currFileBean, IOnProgressListener<String> listener) {
-        iCommon.saveFile(currFileBean, listener);
+    public void saveFile(Context context, FileBean currFileBean, IOnProgressListener<String> listener) {
+        iCommon.saveFile(context, currFileBean, listener);
 
     }
 

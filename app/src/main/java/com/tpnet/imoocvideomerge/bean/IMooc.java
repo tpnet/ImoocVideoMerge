@@ -1,5 +1,7 @@
 package com.tpnet.imoocvideomerge.bean;
 
+import android.content.Context;
+
 import com.tpnet.imoocvideomerge.util.FileUtils;
 
 import java.util.ArrayList;
@@ -80,14 +82,13 @@ public class IMooc {
     }
 
 
-    public String getAvailableSpace() {
-        return FileUtils.getFormatSize(FileUtils.getSDAvailableSize());
+    public String getAvailableSpace(Context context) {
+        return FileUtils.getFormatSize(FileUtils.getSDAvailableSize(context));
     }
 
 
-
-    public Integer getAvailablePercent() {
-        return FileUtils.getSDAvailablePercent();
+    public Integer getAvailablePercent(Context context) {
+        return FileUtils.getSDAvailablePercent(context);
     }
 
 

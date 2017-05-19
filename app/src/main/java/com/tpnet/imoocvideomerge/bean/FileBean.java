@@ -2,6 +2,7 @@ package com.tpnet.imoocvideomerge.bean;
 
 import android.text.TextUtils;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -122,7 +123,8 @@ public class FileBean {
     }
 
     public void setSectionName(String sectionName) {
-        this.sectionName = sectionName;
+        //处理特殊字符
+        this.sectionName = sectionName.replaceAll(File.separator, "");
     }
 
     public int getCourseId() {

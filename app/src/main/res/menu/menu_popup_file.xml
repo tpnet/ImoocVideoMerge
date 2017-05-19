@@ -17,6 +17,13 @@
         android:id="@+id/popup_file_copy_name"
         android:title="@string/copy_file_name" />
 
+    <item
+        android:id="@+id/popup_open_folder"
+        android:title="@string/open_folder"/>
+
+    <item
+        android:id="@+id/popup_open_old_folder"
+        android:title="@string/open_old_folder"/>
 
 
 </menu>

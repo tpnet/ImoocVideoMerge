@@ -18,19 +18,22 @@ import com.tpnet.imoocvideomerge.base.Constant;
 import com.tpnet.imoocvideomerge.bean.FileBean;
 import com.tpnet.imoocvideomerge.bean.FolderBean;
 import com.tpnet.imoocvideomerge.bean.IMooc;
-import com.tpnet.imoocvideomerge.model.IOnProgressListener;
+import com.tpnet.imoocvideomerge.contact.VideoContact;
+import com.tpnet.imoocvideomerge.model.face.IOnProgressListener;
 import com.tpnet.imoocvideomerge.presenter.VideoListPre;
-import com.tpnet.imoocvideomerge.ui.inter.IShowVideoList;
+import com.tpnet.imoocvideomerge.util.FileUtils;
 import com.tpnet.imoocvideomerge.util.LogUtil;
 import com.tpnet.imoocvideomerge.util.SystemTool;
+import com.tpnet.imoocvideomerge.util.ToastUtils;
 import com.tpnet.imoocvideomerge.view.SpanTextView;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class VideoListActivity extends BaseActivity<IShowVideoList, VideoListPre> implements BaseRecyclerAdapter.OnItemClickListener<FileBean>, BaseRecyclerAdapter.OnItemWidgetClickListener<FileBean>, PopupMenu.OnMenuItemClickListener {
+public class VideoListActivity extends BaseActivity<VideoContact.IVideoView, VideoListPre> implements BaseRecyclerAdapter.OnItemClickListener<FileBean>, BaseRecyclerAdapter.OnItemWidgetClickListener<FileBean>, PopupMenu.OnMenuItemClickListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -86,8 +89,8 @@ public class VideoListActivity extends BaseActivity<IShowVideoList, VideoListPre
      * 获取剩余空间
      */
     private void getAvailabSpace(){
-        pbAvailableSpace.setProgress(IMooc.getInstance().getAvailablePercent());
-        tvAvailableSpace.setText(IMooc.getInstance().getAvailableSpace(),R.string.available_space,getResources().getColor(R.color.blackLight));
+        pbAvailableSpace.setProgress(IMooc.getInstance().getAvailablePercent(this));
+        tvAvailableSpace.setText(IMooc.getInstance().getAvailableSpace(this), R.string.available_space, getResources().getColor(R.color.blackLight));
     }
 
 
@@ -155,7 +158,19 @@ public class VideoListActivity extends BaseActivity<IShowVideoList, VideoListPre
                     snackShow(R.string.copy_error);
                 }
                 break;
+            case R.id.popup_open_folder:  //打开保存的目录
+                File parentFile = new File(FileUtils.getSaveRootPathDefault(this) + currFileBean.getCourseName());
+                if (parentFile.exists()) {
+                    FileUtils.openFolder(this, parentFile.getAbsolutePath());
+                } else {
+                    ToastUtils.showShort("你还没进行保存哦!");
+                }
 
+                break;
+            case R.id.popup_open_old_folder:  //打开原的目录
+                FileUtils.openFolder(this, new File(currFileBean.getFilePath()).getParent());
+
+                break;
         }
 
         return false;
@@ -165,11 +180,11 @@ public class VideoListActivity extends BaseActivity<IShowVideoList, VideoListPre
      * 保存单个视频文件
      */
     private void saveViedoFile() {
-        LogUtil.e("开始保存");
+        LogUtil.e("开始保存单个文件");
 
         showDialog("开始复制...", 0);
 
-        mPresenter.saveFile(currFileBean, new IOnProgressListener<String>() {
+        mPresenter.saveFile(this, currFileBean, new IOnProgressListener<String>() {
             @Override
             public void success(List<String> successList, List<String> errorList, Exception e) {
                 if (e == null) {
